@@ -31,3 +31,8 @@ export interface ReimbursmentJSON {
 export interface PaymentJSON {
   paymentNumber: string;
 }
+
+export interface LeaseLockResponse {
+  success: boolean;
+  message?: string;
+}
