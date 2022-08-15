@@ -38,7 +38,7 @@ export interface LeaseLockResponse {
   data?: any;
 }
 
-export interface CheckLeaseLockData {
+export interface LockLeaseData {
   signedMessage: string;
   username: string;
   leaseId: string;
