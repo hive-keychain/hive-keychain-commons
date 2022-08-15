@@ -35,4 +35,5 @@ export interface PaymentJSON {
 export interface LeaseLockResponse {
   success: boolean;
   message?: string;
+  data?: any;
 }
