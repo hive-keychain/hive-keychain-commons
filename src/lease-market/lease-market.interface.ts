@@ -42,4 +42,5 @@ export interface LockLeaseData {
   signedMessage: string;
   username: string;
   leaseId: string;
+  token: string;
 }
