@@ -12,6 +12,7 @@ export interface RequestCancelRequestJSON {
 
 export interface AcceptRequestJSON {
   leaseId: string;
+  token: string;
 }
 
 export interface RequestJSON {
