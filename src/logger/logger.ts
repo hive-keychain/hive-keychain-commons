@@ -18,6 +18,7 @@ export interface LoggerConfig {
 }
 
 const initLogger = (config: LoggerConfig, env: string) => {
+  LoggerTransports.initTransport(config);
   environment = env;
   winstonLogger = winston.createLogger({
     levels: config.levels,
