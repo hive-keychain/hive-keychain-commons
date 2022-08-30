@@ -11,7 +11,7 @@ interface LoggerLevel {
   [level: string]: number;
 }
 
-interface LoggerConfig {
+export interface LoggerConfig {
   levels: LoggerLevel;
   folder: string;
   file: string;
@@ -23,8 +23,8 @@ const initLogger = (config: LoggerConfig, env: string) => {
     levels: config.levels,
     level: 'DEBUG',
     transports: [
-      LoggerTransports.fileRotationTransport,
-      LoggerTransports.consoleTransport,
+      LoggerTransports.getFileRotationTransport(),
+      LoggerTransports.getConsoleTransport(),
     ],
   }) as winston.Logger &
     Record<keyof typeof config['levels'], winston.LeveledLogMethod>;
