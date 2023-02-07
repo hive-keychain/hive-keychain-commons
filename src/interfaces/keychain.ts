@@ -63,6 +63,8 @@ export type RequestEncode = CommonRequestParams & {
   method: KeychainKeyTypes;
 };
 
+export type ExcludeCommonParams<T> = Omit<T, 'rpc' | 'type' | 'key' | 'domain'>;
+
 export type RequestSignBuffer = CommonRequestParams & {
   type: KeychainRequestTypes.signBuffer;
   username?: string;
