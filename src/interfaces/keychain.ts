@@ -86,7 +86,6 @@ export type RequestAddAccountAuthority = CommonRequestParams & {
   role: KeychainKeyTypes;
   weight: number;
   username: string;
-  method: KeychainKeyTypes.active;
 };
 
 export type RequestRemoveAccountAuthority = CommonRequestParams & {
@@ -94,7 +93,6 @@ export type RequestRemoveAccountAuthority = CommonRequestParams & {
   authorizedUsername: string;
   role: KeychainKeyTypes;
   username: string;
-  method: KeychainKeyTypes.active;
 };
 
 export type RequestAddKeyAuthority = CommonRequestParams & {
@@ -102,7 +100,6 @@ export type RequestAddKeyAuthority = CommonRequestParams & {
   authorizedKey: string;
   role: KeychainKeyTypes;
   username: string;
-  method: KeychainKeyTypes.active;
   weight: number;
 };
 
@@ -111,7 +108,6 @@ export type RequestRemoveKeyAuthority = CommonRequestParams & {
   authorizedKey: string;
   role: KeychainKeyTypes;
   username: string;
-  method: KeychainKeyTypes.active;
 };
 
 export type RequestSignTx = CommonRequestParams & {
