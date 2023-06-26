@@ -1,14 +1,13 @@
 /* istanbul ignore file */
 
-import * as moment from 'moment';
+import moment = require('moment');
 import * as winston from 'winston';
 
-const timestampFormat = winston.format.timestamp({
-  format: `[${moment().format('L') + ' ' + moment().format('HH:mm:ss')}]`,
-});
-
 const logFormat = winston.format.printf((info) => {
-  return `[${info.timestamp}][${info.level}] ${info.message}`;
+  const timestamp = moment(info.timestamp);
+  return `[${timestamp.format('L') + ' ' + timestamp.format('HH:mm:ss')}][${
+    info.level
+  }] ${info.message}`;
 });
 
 const colorFormat = winston.format.colorize({
@@ -24,7 +23,6 @@ const colorFormat = winston.format.colorize({
 });
 
 export const LoggerFormats = {
-  timestampFormat,
   logFormat,
   colorFormat,
 };

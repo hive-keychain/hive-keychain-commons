@@ -13,20 +13,21 @@ interface LoggerLevel {
 
 export interface LoggerConfig {
   levels: LoggerLevel;
-  folder: string;
-  file: string;
+  folder?: string;
+  file?: string;
 }
 
 const initLogger = (config: LoggerConfig, env: string) => {
   LoggerTransports.initTransport(config);
+  const transports = [LoggerTransports.getConsoleTransport()];
+  if (config.file && config.folder) {
+    transports.push(LoggerTransports.getFileRotationTransport());
+  }
   environment = env;
   winstonLogger = winston.createLogger({
     levels: config.levels,
     level: 'DEBUG',
-    transports: [
-      LoggerTransports.getFileRotationTransport(),
-      LoggerTransports.getConsoleTransport(),
-    ],
+    transports: transports,
   }) as winston.Logger &
     Record<keyof typeof config['levels'], winston.LeveledLogMethod>;
 };

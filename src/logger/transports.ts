@@ -10,20 +10,18 @@ let fileRotationTransport: DailyRotateFile;
 let consoleTransport: any;
 
 const initTransport = (config: LoggerConfig) => {
-  fileRotationTransport = new DailyRotateFile({
-    filename: path.join(config.folder, config.file),
-    datePattern: 'YYYY-MM-DD',
-    maxSize: '20m',
-    maxFiles: '7',
-    format: winston.format.combine(
-      LoggerFormats.timestampFormat,
-      LoggerFormats.logFormat,
-    ),
-  });
+  if (config.file && config.folder) {
+    fileRotationTransport = new DailyRotateFile({
+      filename: path.join(config.folder!, config.file!),
+      datePattern: 'YYYY-MM-DD',
+      maxSize: '20m',
+      maxFiles: '7',
+      format: winston.format.combine(LoggerFormats.logFormat),
+    });
+  }
 
   consoleTransport = new winston.transports.Console({
     format: winston.format.combine(
-      LoggerFormats.timestampFormat,
       LoggerFormats.colorFormat,
       LoggerFormats.logFormat,
     ),
