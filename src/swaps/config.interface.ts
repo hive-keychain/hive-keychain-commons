@@ -65,5 +65,5 @@ export interface IConvertOptions {
   minimumFee: number;
   balancedFreeFee: boolean;
   skipBalanceCheck?: boolean;
-  memoRegex: RegExp;
+  memoRegex: string;
 }
