@@ -1,8 +1,8 @@
 import { cryptoUtils } from '@hiveio/dhive';
-import { KeysUtils } from './keys.utils';
+import { getPublicKeyFromPrivateKeyString } from './keys.utils';
 
-const getPrivateKeysMemoValidationWarning = (memo: string): boolean => {
-  let memoTemp: string = memo.startsWith('#')
+export const getPrivateKeysMemoValidationWarning = (memo: string): boolean => {
+  const memoTemp: string = memo.startsWith('#')
     ? memo.substring(1, memo.length)
     : memo;
   let found: RegExpMatchArray | null;
@@ -10,7 +10,7 @@ const getPrivateKeysMemoValidationWarning = (memo: string): boolean => {
   if (found) {
     for (const word of found) {
       if (cryptoUtils.isWif(word) && word.length === 51) {
-        if (KeysUtils.getPublicKeyFromPrivateKeyString(word)) return true;
+        if (getPublicKeyFromPrivateKeyString(word)) return true;
       } else if (word.startsWith('P') && word.length === 52) {
         return true;
       }
@@ -18,5 +18,3 @@ const getPrivateKeysMemoValidationWarning = (memo: string): boolean => {
   }
   return false;
 };
-
-export const TransferUtils = { getPrivateKeysMemoValidationWarning };

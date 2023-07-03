@@ -1,6 +1,6 @@
 import { PrivateKey } from '@hiveio/dhive';
 
-const getPublicKeyFromPrivateKeyString = (privateKeyS: string) => {
+export const getPublicKeyFromPrivateKeyString = (privateKeyS: string) => {
   try {
     const privateKey = PrivateKey.fromString(privateKeyS);
     const publicKey = privateKey.createPublic();
@@ -8,8 +8,4 @@ const getPublicKeyFromPrivateKeyString = (privateKeyS: string) => {
   } catch (e) {
     return null;
   }
-};
-
-export const KeysUtils = {
-  getPublicKeyFromPrivateKeyString,
 };

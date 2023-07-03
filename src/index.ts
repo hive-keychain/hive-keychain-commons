@@ -12,3 +12,5 @@ export {
 export * from './swaps/config.interface';
 export * from './swaps/swap-api.interface';
 export * from './swaps/swap.interface';
+export * from './utils/keys.utils';
+export * from './utils/transfer.utils';
