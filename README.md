@@ -1,2 +1,3 @@
 # hive-keychain-commons
-Platform agnostic functions used in Hive Keychain mobile and extensions
+
+Platform agnostic interfaces and functions used in Hive Keychain mobile, extensions and other services
