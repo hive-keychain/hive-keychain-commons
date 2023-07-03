@@ -1,10 +1,8 @@
-import { LoggerConfig } from '../logger/logger';
 import { Provider } from './swap.interface';
 
 export interface SwapServerConfig {
   rpc: string[];
   hiveEngineRpc: string[];
-  logger?: LoggerConfig;
   swaps: SwapConfig;
   priceRefreshIntervalInMinutes: number;
 }
