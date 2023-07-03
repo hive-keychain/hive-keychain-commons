@@ -27,7 +27,7 @@ const initLogger = (config: LoggerConfig, env: string) => {
   winstonLogger = winston.createLogger({
     levels: config.levels,
     level: 'DEBUG',
-    transports: transports,
+    transports,
   }) as winston.Logger &
     Record<keyof typeof config['levels'], winston.LeveledLogMethod>;
 };
