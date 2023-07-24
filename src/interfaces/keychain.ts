@@ -3,7 +3,7 @@ import { Operation, Transaction } from '@hiveio/dhive';
 export enum KeychainRequestTypes {
   decode = 'decode',
   encode = 'encode',
-  encodeMultisig = 'encodeMultisig',
+  encodeWithKeys = 'encodeWithKeys',
   signBuffer = 'signBuffer',
   broadcast = 'broadcast',
   addAccountAuthority = 'addAccountAuthority',
@@ -64,8 +64,8 @@ export type RequestEncode = CommonRequestParams & {
   method: KeychainKeyTypes;
 };
 
-export declare type RequestEncodeMultisig = CommonRequestParams & {
-  type: KeychainRequestTypes.encodeMultisig;
+export type RequestEncodeWithKeys = CommonRequestParams & {
+  type: KeychainRequestTypes.encodeWithKeys;
   username: string;
   publicKeys: string[];
   message: string;
@@ -285,7 +285,7 @@ export type RequestRecurrentTransfer = CommonRequestParams & {
 
 export type KeychainRequestData = (
   | RequestDecode
-  | RequestEncodeMultisig
+  | RequestEncodeWithKeys
   | RequestEncode
   | RequestSignBuffer
   | RequestBroadcast
