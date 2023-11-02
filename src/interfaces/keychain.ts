@@ -1,4 +1,5 @@
 import { Operation, Transaction } from '@hiveio/dhive';
+import { IStep } from '../swaps/swap.interface';
 
 export enum KeychainRequestTypes {
   decode = 'decode',
@@ -29,6 +30,7 @@ export enum KeychainRequestTypes {
   addAccount = 'addAccount',
   convert = 'convert',
   recurrentTransfer = 'recurrentTransfer',
+  swap = 'swap',
 }
 
 export enum KeychainKeyTypes {
@@ -283,6 +285,16 @@ export type RequestRecurrentTransfer = CommonRequestParams & {
   executions: number;
 };
 
+export type RequestSwap = CommonRequestParams & {
+  type: KeychainRequestTypes.swap;
+  steps: IStep[];
+  slippage: number;
+  startToken: string;
+  endToken: string;
+  amount: number;
+  username?: string;
+};
+
 export type KeychainRequestData = (
   | RequestDecode
   | RequestEncodeWithKeys
@@ -312,6 +324,7 @@ export type KeychainRequestData = (
   | RequestAddAccount
   | RequestConvert
   | RequestRecurrentTransfer
+  | RequestSwap
 ) & { redirect_uri?: string };
 
 export type RequestId = { request_id: number };
