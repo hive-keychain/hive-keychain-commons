@@ -27,6 +27,7 @@ export interface SwapExpirationConfig {
 export interface SwapFeeConfig {
   account: string;
   amount: number;
+  ignoreList: string[];
 }
 
 export interface SwapSlippageConfig {
