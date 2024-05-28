@@ -29,7 +29,7 @@ const initLogger = (config: LoggerConfig, env: string) => {
     level: 'DEBUG',
     transports,
   }) as winston.Logger &
-    Record<keyof typeof config['levels'], winston.LeveledLogMethod>;
+    Record<keyof (typeof config)['levels'], winston.LeveledLogMethod>;
 };
 
 const info = (message: string) => {
