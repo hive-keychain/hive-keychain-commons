@@ -293,6 +293,8 @@ export type RequestSwap = CommonRequestParams & {
   endToken: string;
   amount: number;
   username?: string;
+  partnerUsername?: string;
+  partnerFee?: number;
 };
 
 export type KeychainRequestData = (
