@@ -31,6 +31,7 @@ export enum KeychainRequestTypes {
   convert = 'convert',
   recurrentTransfer = 'recurrentTransfer',
   swap = 'swap',
+  vscCallContract = 'vscCallContract',
 }
 
 export enum KeychainKeyTypes {
@@ -297,6 +298,14 @@ export type RequestSwap = CommonRequestParams & {
   partnerFee?: number;
 };
 
+export type RequestVscCallContract = CommonRequestParams & {
+  type: KeychainRequestTypes.vscCallContract;
+  username?: string;
+  contractId: string;
+  action: string;
+  payload: object;
+};
+
 export type KeychainRequestData = (
   | RequestDecode
   | RequestEncodeWithKeys
@@ -327,6 +336,7 @@ export type KeychainRequestData = (
   | RequestConvert
   | RequestRecurrentTransfer
   | RequestSwap
+  | RequestVscCallContract
 ) & { redirect_uri?: string };
 
 export type RequestId = { request_id: number };
