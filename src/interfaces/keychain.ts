@@ -304,6 +304,7 @@ export type RequestVscCallContract = CommonRequestParams & {
   contractId: string;
   action: string;
   payload: object;
+  method: KeychainKeyTypes.posting | KeychainKeyTypes.active;
 };
 
 export type KeychainRequestData = (
