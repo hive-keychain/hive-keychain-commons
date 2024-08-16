@@ -32,6 +32,7 @@ export enum KeychainRequestTypes {
   recurrentTransfer = 'recurrentTransfer',
   swap = 'swap',
   vscCallContract = 'vscCallContract',
+  vscDeposit = 'vscDeposit',
 }
 
 export enum KeychainKeyTypes {
@@ -307,6 +308,14 @@ export type RequestVscCallContract = CommonRequestParams & {
   method: KeychainKeyTypes.posting | KeychainKeyTypes.active;
 };
 
+export type RequestVscCDeposit = CommonRequestParams & {
+  type: KeychainRequestTypes.vscDeposit;
+  username?: string;
+  address: string;
+  amount: string;
+  currency: string;
+};
+
 export type KeychainRequestData = (
   | RequestDecode
   | RequestEncodeWithKeys
@@ -338,6 +347,7 @@ export type KeychainRequestData = (
   | RequestRecurrentTransfer
   | RequestSwap
   | RequestVscCallContract
+  | RequestVscCDeposit
 ) & { redirect_uri?: string };
 
 export type RequestId = { request_id: number };
