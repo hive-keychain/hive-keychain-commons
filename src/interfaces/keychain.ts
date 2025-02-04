@@ -308,7 +308,7 @@ export type RequestVscCallContract = CommonRequestParams & {
   method: KeychainKeyTypes.posting | KeychainKeyTypes.active;
 };
 
-export type RequestVscCDeposit = CommonRequestParams & {
+export type RequestDeposit = CommonRequestParams & {
   type: KeychainRequestTypes.vscDeposit;
   username?: string;
   address: string;
@@ -347,7 +347,7 @@ export type KeychainRequestData = (
   | RequestRecurrentTransfer
   | RequestSwap
   | RequestVscCallContract
-  | RequestVscCDeposit
+  | RequestDeposit
 ) & { redirect_uri?: string };
 
 export type RequestId = { request_id: number };
