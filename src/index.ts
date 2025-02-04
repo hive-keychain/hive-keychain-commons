@@ -1,4 +1,5 @@
 export * from './interfaces/keychain';
+export * from './interfaces/vsc';
 export { LeaseKeys } from './lease-market/lease-keys';
 export {
   AcceptRequestJSON,
