@@ -11,10 +11,10 @@ export class Asset {
   /**
    * Create a new Asset instance from a string, e.g. `42.000 HIVE`.
    */
-  static fromString = (string: string, expectedSymbol?: AssetSymbol) => {
-    var _a = string.split(' '),
-      amountString = _a[0],
-      symbol = _a[1];
+  static fromString = (str: string, expectedSymbol?: AssetSymbol) => {
+    const _a = str.split(' ');
+    const amountString = _a[0];
+    const symbol = _a[1];
     if (
       !['HIVE', 'VESTS', 'HBD', 'TESTS', 'TBD', 'SBD', 'STEEM'].includes(symbol)
     ) {
@@ -25,7 +25,7 @@ export class Asset {
         'Invalid asset, expected symbol: ' + expectedSymbol + ' got: ' + symbol,
       );
     }
-    var amount = Number.parseFloat(amountString);
+    const amount = Number.parseFloat(amountString);
     if (!Number.isFinite(amount)) {
       throw new Error('Invalid asset amount: ' + amountString);
     }
@@ -36,10 +36,7 @@ export class Asset {
    * @param symbol Symbol to use when created from number. Will also be used to validate
    *               the asset, throws if the passed value has a different symbol than this.
    */
-  static from = function (
-    value: number | Asset | string,
-    symbol?: AssetSymbol,
-  ) {
+  static from = (value: number | Asset | string, symbol?: AssetSymbol) => {
     if (value instanceof Asset) {
       if (symbol && value.symbol !== symbol) {
         throw new Error(
@@ -58,7 +55,7 @@ export class Asset {
   /**
    * Return the smaller of the two assets.
    */
-  static min = function (a: Asset, b: Asset) {
+  static min = (a: Asset, b: Asset) => {
     assert(
       a.symbol === b.symbol,
       'can not compare assets with different symbols',
@@ -68,7 +65,7 @@ export class Asset {
   /**
    * Return the larger of the two assets.
    */
-  static max = function (a: Asset, b: Asset) {
+  static max = (a: Asset, b: Asset) => {
     assert(
       a.symbol === b.symbol,
       'can not compare assets with different symbols',
@@ -102,7 +99,7 @@ export class Asset {
    * Return a new Asset instance with amount added.
    */
   add = (amount: number | Asset | string) => {
-    var other = Asset.from(amount, this.symbol);
+    const other = Asset.from(amount, this.symbol);
     assert(this.symbol === other.symbol, 'can not add with different symbols');
     return new Asset(this.amount + other.amount, this.symbol);
   };
@@ -110,7 +107,7 @@ export class Asset {
    * Return a new Asset instance with amount subtracted.
    */
   subtract = (amount: number | Asset | string) => {
-    var other = Asset.from(amount, this.symbol);
+    const other = Asset.from(amount, this.symbol);
     assert(
       this.symbol === other.symbol,
       'can not subtract with different symbols',
@@ -121,7 +118,7 @@ export class Asset {
    * Return a new Asset with the amount multiplied by factor.
    */
   multiply = (factor: number | Asset | string) => {
-    var other = Asset.from(factor, this.symbol);
+    const other = Asset.from(factor, this.symbol);
     assert(
       this.symbol === other.symbol,
       'can not multiply with different symbols',
@@ -132,7 +129,7 @@ export class Asset {
    * Return a new Asset with the amount divided.
    */
   divide = (divisor: number | Asset | string) => {
-    var other = Asset.from(divisor, this.symbol);
+    const other = Asset.from(divisor, this.symbol);
     assert(
       this.symbol === other.symbol,
       'can not divide with different symbols',
