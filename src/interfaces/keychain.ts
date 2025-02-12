@@ -1,4 +1,4 @@
-import { Operation, Transaction } from '@hiveio/dhive';
+import type { Operation, Transaction } from '@hiveio/dhive';
 import { IStep } from '../swaps/swap.interface';
 
 export enum KeychainRequestTypes {

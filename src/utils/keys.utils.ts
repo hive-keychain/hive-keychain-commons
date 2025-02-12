@@ -1,4 +1,4 @@
-import { PrivateKey } from '@hiveio/dhive';
+import { PrivateKey } from 'hive-tx';
 
 export const getPublicKeyFromPrivateKeyString = (privateKeyS: string) => {
   try {

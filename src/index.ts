@@ -13,6 +13,9 @@ export {
 export * from './swaps/config.interface';
 export * from './swaps/swap-api.interface';
 export * from './swaps/swap.interface';
+export * from './utils/assets.utils';
+export * from './utils/crypto.utils';
+export * from './utils/history-filters.utils';
 export * from './utils/keys.utils';
 export * from './utils/transfer.utils';
 export * from './utils/vsc.utils';
