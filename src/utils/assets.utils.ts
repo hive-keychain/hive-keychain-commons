@@ -17,16 +17,16 @@ export class Asset {
     if (
       !['HIVE', 'VESTS', 'HBD', 'TESTS', 'TBD', 'SBD', 'STEEM'].includes(symbol)
     ) {
-      throw new Error('Invalid asset symbol: ' + symbol);
+      throw new Error(`Invalid asset symbol: ${symbol}`);
     }
     if (expectedSymbol && symbol !== expectedSymbol) {
       throw new Error(
-        'Invalid asset, expected symbol: ' + expectedSymbol + ' got: ' + symbol,
+        `Invalid asset, expected symbol: ${expectedSymbol} got: ${symbol}`,
       );
     }
     const amount = Number.parseFloat(amountString);
     if (!Number.isFinite(amount)) {
-      throw new Error('Invalid asset amount: ' + amountString);
+      throw new Error(`Invalid asset amount: ${amountString}`);
     }
     return new Asset(amount, symbol as AssetSymbol);
   };
@@ -39,7 +39,7 @@ export class Asset {
     if (value instanceof Asset) {
       if (symbol && value.symbol !== symbol) {
         throw new Error(
-          'Invalid asset, expected symbol: ' + symbol + ' got: ' + value.symbol,
+          `Invalid asset, expected symbol: ${symbol} got: ${value.symbol}`,
         );
       }
       return value;
@@ -48,7 +48,7 @@ export class Asset {
     } else if (typeof value === 'string') {
       return Asset.fromString(value, symbol as AssetSymbol);
     } else {
-      throw new Error("Invalid asset '" + String(value) + "'");
+      throw new Error(`Invalid asset '${String(value)}'`);
     }
   };
   /**
@@ -56,7 +56,7 @@ export class Asset {
    */
   static min = (a: Asset, b: Asset) => {
     if (a.symbol !== b.symbol)
-      throw 'can not compare assets with different symbols';
+      throw new Error(`can not compare assets with different symbols`);
 
     return a.amount < b.amount ? a : b;
   };
@@ -65,7 +65,7 @@ export class Asset {
    */
   static max = (a: Asset, b: Asset) => {
     if (a.symbol !== b.symbol)
-      throw 'can not compare assets with different symbols';
+      throw new Error(`can not compare assets with different symbols`);
 
     return a.amount > b.amount ? a : b;
   };
@@ -98,7 +98,8 @@ export class Asset {
   add = (amount: number | Asset | string) => {
     const other = Asset.from(amount, this.symbol);
     if (this.symbol !== other.symbol)
-      throw 'can not add with different symbols';
+      throw new Error(`can not add with different symbols`);
+
     return new Asset(this.amount + other.amount, this.symbol);
   };
   /**
@@ -107,7 +108,7 @@ export class Asset {
   subtract = (amount: number | Asset | string) => {
     const other = Asset.from(amount, this.symbol);
     if (this.symbol !== other.symbol)
-      throw 'can not subtract with different symbols';
+      throw new Error(`can not subtract with different symbols`);
 
     return new Asset(this.amount - other.amount, this.symbol);
   };
@@ -118,7 +119,7 @@ export class Asset {
   multiply = (factor: number | Asset | string) => {
     const other = Asset.from(factor, this.symbol);
     if (this.symbol !== other.symbol) {
-      throw new Error('can not multiply with different symbols');
+      throw new Error(`can not multiply with different symbols`);
     }
     return new Asset(this.amount * other.amount, this.symbol);
   };
@@ -129,7 +130,7 @@ export class Asset {
   divide = (divisor: number | Asset | string) => {
     const other = Asset.from(divisor, this.symbol);
     if (this.symbol !== other.symbol) {
-      throw new Error('can not divide with different symbols');
+      throw new Error(`can not divide with different symbols`);
     }
 
     return new Asset(this.amount / other.amount, this.symbol);
@@ -204,7 +205,7 @@ export class Price {
         this.base.symbol,
       );
     } else {
-      throw new Error('Can not convert ' + asset + ' with ' + this);
+      throw new Error(`Can not convert ${asset} with ${this}`);
     }
   };
 }
