@@ -90,19 +90,16 @@ const operationOrders = {
   failed_recurrent_transfer: 84,
 };
 
-/**
- * Make bitmask filter to be used with getAccountHistory call
- * @param allowedOperations Array of operations index numbers
- */
-function makeBitMaskFilter(allowedOperations: number[]) {
-  return allowedOperations
-    .map((value: any) =>
+export function makeBitMaskFilter(allowedOperations: number[]) {
+  const ops = allowedOperations
+    .reduce(redFunction, [JSBI.BigInt(0), JSBI.BigInt(0)])
+    .map((value) =>
       JSBI.notEqual(value, JSBI.BigInt(0)) ? value.toString() : null,
-    )
-    .reduce(redFunction, [JSBI.BigInt(0), JSBI.BigInt(0)]);
+    );
+  return ops;
 }
 
-const redFunction = ([low, high]: [any, any], allowedOperation: any) => {
+const redFunction = ([low, high]: any, allowedOperation: number) => {
   if (allowedOperation < 64) {
     return [
       JSBI.bitwiseOr(
