@@ -60,6 +60,7 @@ export interface IProvider {
 
 export interface IConvertOptions {
   minimumAmount?: number;
+  maximumAmount?: number;
   fee: number;
   minimumFee: number;
   balancedFreeFee: boolean;
