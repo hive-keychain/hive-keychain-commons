@@ -46,7 +46,7 @@ const fetchTransactions = async (
   ]) as [number, number];
 
   const lastTransaction = await TransactionUtils.getLastTransaction(username);
-  let limit = Math.min();
+  let limit = Math.min(1000, lastTransaction);
   let start = lastTransaction;
   let rawTransactions: any[] = [];
   let operations: ExportTransactionOperation[] = [];
