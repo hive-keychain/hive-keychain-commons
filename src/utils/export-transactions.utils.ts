@@ -17,6 +17,53 @@ export interface ExportTransactionOperation {
   operationType: Operation;
 }
 
+const generateCSV = (operations: ExportTransactionOperation[]): string => {
+  try {
+    if (!Array.isArray(operations)) {
+      throw new Error('Input must be an array of operations');
+    }
+
+    if (operations.length === 0) {
+      return 'Operation Type,Date,Transaction ID, Block number,From,To,Amount,Currency\r\n';
+    }
+
+    let csvContent = `Operation Type,Date,Transaction ID, Block number,From,To,Amount,Currency\r\n`;
+
+    for (const operation of operations) {
+      if (
+        !operation.operationType ||
+        !operation.datetime ||
+        !operation.transactionId ||
+        !operation.blockNumber
+      ) {
+        throw new Error('Missing required fields in operation');
+      }
+
+      const sanitizedValues = {
+        operationType: String(operation.operationType).replace(
+          /[,\r\n"]/g,
+          ' ',
+        ),
+        datetime: String(operation.datetime).replace(/[,\r\n"]/g, ' '),
+        transactionId: String(operation.transactionId).replace(
+          /[,\r\n"]/g,
+          ' ',
+        ),
+        blockNumber: String(operation.blockNumber),
+        from: (operation.from ?? 'NA').replace(/[,\r\n"]/g, ' '),
+        to: (operation.to ?? 'NA').replace(/[,\r\n"]/g, ' '),
+        amount: String(operation.amount),
+        currency: String(operation.currency).replace(/[,\r\n"]/g, ' '),
+      };
+
+      csvContent += `${sanitizedValues.operationType},${sanitizedValues.datetime},${sanitizedValues.transactionId},${sanitizedValues.blockNumber},${sanitizedValues.from},${sanitizedValues.to},${sanitizedValues.amount},${sanitizedValues.currency}\r\n`;
+    }
+
+    return csvContent;
+  } catch (error: any) {
+    throw new Error(`Failed to generate CSV: ${error.message}`);
+  }
+};
 const fetchTransactions = async (
   username: string,
   startDate?: Date,
@@ -362,4 +409,5 @@ const fetchTransactions = async (
 
 export const ExportTransactionsUtils = {
   fetchTransactions,
+  generateCSV,
 };
