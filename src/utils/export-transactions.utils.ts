@@ -39,7 +39,6 @@ const generateCSV = (operations: ExportTransactionOperation[]): string => {
         throw new Error('Missing required fields in operation');
       }
 
-      console.log(operation.datetime);
       const sanitizedValues = {
         operationType: String(operation.operationType).replace(
           /[,\r\n"]/g,
@@ -130,8 +129,6 @@ const fetchTransactions = async (
         const operationType = tx[1].op[0];
         const transactionInfo = tx[1];
 
-        console.log('transactionInfo.timestamp', transactionInfo.timestamp);
-
         // Simple timestamp handling - use original string if parsing fails
         let date;
         try {
@@ -156,9 +153,6 @@ const fetchTransactions = async (
           date && date.isValid()
             ? date.format('YYYY-MM-DD HH:mm:ss')
             : transactionInfo.timestamp;
-
-        console.log('date', date);
-        console.log('localDatetime', localDatetime);
 
         // Ensure date is valid for date comparisons
         const validDate = date && date.isValid() ? date : moment(new Date());
