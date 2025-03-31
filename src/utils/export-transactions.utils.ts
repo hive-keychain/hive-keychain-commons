@@ -132,7 +132,7 @@ const fetchTransactions = async (
         const date = process.env.IS_FIREFOX
           ? moment(transactionInfo.timestamp)
           : moment(transactionInfo.timestamp + 'z');
-        const localDatetime = date.format('yyyy-MM-DD HH:mm:ss');
+        const localDatetime = date.format('YYYY-MM-DD HH:mm:ss');
         if (endDate && date.isSameOrAfter(moment(endDate).add(1, 'day'), 'day'))
           continue;
 
