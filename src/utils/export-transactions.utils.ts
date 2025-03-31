@@ -39,6 +39,7 @@ const generateCSV = (operations: ExportTransactionOperation[]): string => {
         throw new Error('Missing required fields in operation');
       }
 
+      console.log(operation.datetime);
       const sanitizedValues = {
         operationType: String(operation.operationType).replace(
           /[,\r\n"]/g,
@@ -129,10 +130,19 @@ const fetchTransactions = async (
         const operationType = tx[1].op[0];
         const transactionInfo = tx[1];
 
+        console.log('transactionInfo.timestamp', transactionInfo.timestamp);
         const date = process.env.IS_FIREFOX
           ? moment(transactionInfo.timestamp)
           : moment(transactionInfo.timestamp + 'z');
+
         const localDatetime = date.format('YYYY-MM-DD HH:mm:ss');
+        console.log('date', date);
+        console.log(
+          " moment(transactionInfo.timestamp + 'z')",
+          moment(transactionInfo.timestamp, 'z'),
+        );
+        console.log('localDatetime', localDatetime);
+
         if (endDate && date.isSameOrAfter(moment(endDate).add(1, 'day'), 'day'))
           continue;
 
