@@ -131,22 +131,45 @@ const fetchTransactions = async (
         const transactionInfo = tx[1];
 
         console.log('transactionInfo.timestamp', transactionInfo.timestamp);
-        const date = process.env.IS_FIREFOX
-          ? moment(transactionInfo.timestamp)
-          : moment(transactionInfo.timestamp + 'z');
 
-        const localDatetime = date.format('YYYY-MM-DD HH:mm:ss');
+        // Simple timestamp handling - use original string if parsing fails
+        let date;
+        try {
+          if (process.env.IS_FIREFOX) {
+            date = moment(transactionInfo.timestamp);
+          } else {
+            // Try parsing with timezone marker
+            const timestamp =
+              transactionInfo.timestamp.endsWith('z') ||
+              transactionInfo.timestamp.endsWith('Z')
+                ? transactionInfo.timestamp
+                : transactionInfo.timestamp + 'Z';
+            date = moment(timestamp);
+          }
+        } catch (error) {
+          console.error('Error parsing timestamp:', error);
+          date = null; // Fall back to using the original string
+        }
+
+        // Use the original timestamp string if moment parsing failed
+        const localDatetime =
+          date && date.isValid()
+            ? date.format('YYYY-MM-DD HH:mm:ss')
+            : transactionInfo.timestamp;
+
         console.log('date', date);
-        console.log(
-          " moment(transactionInfo.timestamp + 'z')",
-          moment(transactionInfo.timestamp, 'z'),
-        );
         console.log('localDatetime', localDatetime);
 
-        if (endDate && date.isSameOrAfter(moment(endDate).add(1, 'day'), 'day'))
+        // Ensure date is valid for date comparisons
+        const validDate = date && date.isValid() ? date : moment(new Date());
+
+        if (
+          endDate &&
+          validDate.isSameOrAfter(moment(endDate).add(1, 'day'), 'day')
+        )
           continue;
 
-        if (startDate && date.isBefore(moment(startDate), 'day')) {
+        if (startDate && validDate.isBefore(moment(startDate), 'day')) {
           forceStop = true;
           break;
         }
