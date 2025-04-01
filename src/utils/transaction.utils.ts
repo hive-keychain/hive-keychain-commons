@@ -1,4 +1,3 @@
-import type { Operation } from '@hiveio/dhive';
 import { call } from 'hive-tx';
 import { HistoryFiltersUtils } from '../index';
 
