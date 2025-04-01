@@ -3,8 +3,8 @@ import moment from 'moment';
 import { Asset, HistoryFiltersUtils } from '../index';
 import { TransactionUtils } from './transaction.utils';
 
-const proposal_fee = 87;
-const collateralized_convert_immediate_conversion = 88;
+const PROPOSAL_FEE = 87;
+const COLLATERALIZED_CONVERT_IMMEDIATE_CONVERSION = 88;
 
 export interface ExportTransactionOperation {
   datetime: string;
@@ -79,7 +79,7 @@ const fetchTransactions = async (
     op.fill_vesting_withdraw,
     op.fill_convert_request,
     op.fill_collateralized_convert_request,
-    collateralized_convert_immediate_conversion,
+    COLLATERALIZED_CONVERT_IMMEDIATE_CONVERSION,
     op.fill_recurrent_transfer,
     op.fill_order,
     op.producer_reward,
@@ -89,14 +89,14 @@ const fetchTransactions = async (
     op.account_create_with_delegation,
     op.proposal_pay,
     op.escrow_approve,
-    proposal_fee,
+    PROPOSAL_FEE,
   ]) as [number, number];
 
   const lastTransaction = await TransactionUtils.getLastTransaction(username);
-  let limit = Math.min(1000, lastTransaction);
+  const limit = Math.min(1000, lastTransaction);
   let start = lastTransaction;
   let rawTransactions: any[] = [];
-  let operations: ExportTransactionOperation[] = [];
+  const operations: ExportTransactionOperation[] = [];
   let forceStop = false;
   let percentageDuration;
 
@@ -169,7 +169,7 @@ const fetchTransactions = async (
         }
 
         const operation: ExportTransactionOperation = {
-          operationType: operationType,
+          operationType,
           datetime: localDatetime,
           transactionId: transactionInfo.trx_id,
           blockNumber: transactionInfo.block,
@@ -283,7 +283,7 @@ const fetchTransactions = async (
             break;
           }
           case 'producer_reward': {
-            let asset = Asset.fromString(
+            const asset = Asset.fromString(
               operationPayload.vesting_shares.toString(),
             );
             operations.push({
@@ -348,7 +348,7 @@ const fetchTransactions = async (
           }
           case 'account_create':
           case 'account_create_with_delegation': {
-            let asset = Asset.fromString(operationPayload.fee.toString());
+            const asset = Asset.fromString(operationPayload.fee.toString());
             if (asset.amount > 0)
               operations.push({
                 ...operation,
@@ -359,7 +359,7 @@ const fetchTransactions = async (
             break;
           }
           case 'proposal_pay': {
-            let asset = Asset.fromString(operationPayload.payment.toString());
+            const asset = Asset.fromString(operationPayload.payment.toString());
             if (asset.amount > 0)
               operations.push({
                 ...operation,
@@ -394,7 +394,7 @@ const fetchTransactions = async (
             break;
           }
           case 'proposal_fee': {
-            let asset = Asset.fromString(operationPayload.fee.toString());
+            const asset = Asset.fromString(operationPayload.fee.toString());
             if (asset.amount > 0)
               operations.push({
                 ...operation,
@@ -406,7 +406,7 @@ const fetchTransactions = async (
             break;
           }
           default:
-            console.log(`missing ${operationType}`);
+            console.info(`missing ${operationType}`);
             break;
         }
       }

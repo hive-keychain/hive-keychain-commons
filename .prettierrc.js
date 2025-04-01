@@ -1,3 +1,5 @@
+const { console } = require('inspector');
+
 module.exports = {
   bracketSpacing: true,
   jsxBracketSameLine: true,
