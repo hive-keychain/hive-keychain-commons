@@ -1,5 +1,6 @@
 import type { Operation, Transaction } from '@hiveio/dhive';
 import { IStep } from '../swaps/swap.interface';
+import { VscRequestParams, VscStakingOperation } from './vsc';
 
 export enum KeychainRequestTypes {
   decode = 'decode',
@@ -33,6 +34,9 @@ export enum KeychainRequestTypes {
   swap = 'swap',
   vscCallContract = 'vscCallContract',
   vscDeposit = 'vscDeposit',
+  vscWithdrawal = 'vscWithdrawal',
+  vscTransfer = 'vscTransfer',
+  vscStaking = 'vscStaking',
 }
 
 export enum KeychainKeyTypes {
@@ -308,13 +312,43 @@ export type RequestVscCallContract = CommonRequestParams & {
   method: KeychainKeyTypes.posting | KeychainKeyTypes.active;
 };
 
-export type RequestDeposit = CommonRequestParams & {
+export type RequestVscDeposit = CommonRequestParams & {
   type: KeychainRequestTypes.vscDeposit;
   username?: string;
-  address: string;
+  to?: string;
   amount: string;
   currency: string;
 };
+
+export type RequestVscWithdrawal = CommonRequestParams &
+  VscRequestParams & {
+    type: KeychainRequestTypes.vscWithdrawal;
+    username?: string;
+    to: string;
+    amount: string;
+    currency: string;
+    memo: string;
+  };
+
+export type RequestVscTransfer = CommonRequestParams &
+  VscRequestParams & {
+    type: KeychainRequestTypes.vscTransfer;
+    username?: string;
+    to: string;
+    amount: string;
+    currency: string;
+    memo: string;
+  };
+
+export type RequestVscStaking = CommonRequestParams &
+  VscRequestParams & {
+    type: KeychainRequestTypes.vscStaking;
+    username?: string;
+    to: string;
+    amount: string;
+    currency: string;
+    operation: VscStakingOperation;
+  };
 
 export type KeychainRequestData = (
   | RequestDecode
@@ -347,7 +381,10 @@ export type KeychainRequestData = (
   | RequestRecurrentTransfer
   | RequestSwap
   | RequestVscCallContract
-  | RequestDeposit
+  | RequestVscDeposit
+  | RequestVscWithdrawal
+  | RequestVscTransfer
+  | RequestVscStaking
 ) & { redirect_uri?: string };
 
 export type RequestId = { request_id: number };

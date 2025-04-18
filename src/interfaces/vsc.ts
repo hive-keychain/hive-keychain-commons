@@ -2,11 +2,16 @@ export enum VscStatus {
   UNCONFIRMED = 'UNCONFIRMED',
   CONFIRMED = 'CONFIRMED',
   INCLUDED = 'INCLUDED',
+  FAILED = 'FAILED',
 }
 
 export enum VscHistoryType {
   CONTRACT_CALL = 'CONTRACT_CALL',
   TRANSFER = 'TRANSFER',
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAW = 'WITHDRAW',
+  STAKING = 'STAKING',
+  UNSTAKING = 'UNSTAKING',
 }
 
 export enum VscLedgerType {
@@ -19,6 +24,14 @@ export enum VscToken {
   HBD = 'HBD',
 }
 
+export enum VscStakingOperation {
+  STAKING = 'STAKING',
+  UNSTAKING = 'UNSTAKING',
+}
+
+export type VscRequestParams = {
+  netId?: string;
+};
 export type VscHistoryResponse = {
   findLedgerTXs: {
     txs: VscTransfer[];
