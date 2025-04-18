@@ -51,7 +51,6 @@ const checkStatus = (id: string, type: VscHistoryType): Promise<VscStatus> => {
     }`;
   }
   return fetchQuery(query).then((res) => {
-    console.log(res.data);
     return (
       res?.data?.findTransaction?.[0]?.status ||
       res?.data?.findLedgerTXs?.[0]?.status
