@@ -1,4 +1,7 @@
+export * from './interfaces/global-properties';
 export * from './interfaces/keychain';
+export * from './interfaces/price';
+export * from './interfaces/tokens';
 export * from './interfaces/vsc';
 export { LeaseKeys } from './lease-market/lease-keys';
 export {
@@ -16,6 +19,7 @@ export * from './swaps/swap.interface';
 export * from './utils/assets.utils';
 export * from './utils/crypto.utils';
 export * from './utils/export-transactions.utils';
+export * from './utils/format.utils';
 export * from './utils/history-filters.utils';
 export * from './utils/keys.utils';
 export * from './utils/transaction.utils';

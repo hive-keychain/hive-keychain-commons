@@ -1,10 +1,18 @@
 import moment from 'moment';
 import Config from '../config';
 import {
+  RequestVscStaking,
+  RequestVscTransfer,
+  RequestVscWithdrawal,
+} from '../interfaces/keychain';
+import {
+  VscHistoryItem,
   VscHistoryResponse,
   VscHistoryType,
+  VscStakingOperation,
   VscStatus,
 } from '../interfaces/vsc';
+import { FormatUtils } from './format.utils';
 
 const waitForStatus = async (
   id: string,
@@ -43,51 +51,57 @@ const checkStatus = (id: string, type: VscHistoryType): Promise<VscStatus> => {
     }`;
   } else if (type === VscHistoryType.DEPOSIT) {
     query = `{
-      findLedgerTXs(filterOptions: {byTxId: "${id}-0"}) {
+      findLedgerTXs(filterOptions: {byTxId: "${id}"}) {
       
-        status
+        id
       
     }
     }`;
   }
   return fetchQuery(query).then((res) => {
-    return (
-      res?.data?.findTransaction?.[0]?.status ||
-      res?.data?.findLedgerTXs?.[0]?.status
-    );
+    if (res?.data?.findTransaction?.[0])
+      return res.data.findTransaction?.[0].status;
+    return res?.data?.findLedgerTXs?.[0]?.id === id
+      ? VscStatus.CONFIRMED
+      : VscStatus.UNCONFIRMED;
   });
 };
 
 const fetchHistory = async (username: string): Promise<VscHistoryResponse> => {
   const query = `{
-    findLedgerTXs(
-      filterOptions: {byToFrom: "hive:${username}"}
-    ) {
-      txs {
-        amount
-        block_height
-        from
-        id
-        memo
-        owner
-        t
-        tk
-        status
-      }
+  #  findLedgerTXs(filterOptions: {byToFrom: "hive:${username}",byTypes: "deposit"}) {
+  #           amount
+  #           asset
+  #           block_height
+  #           from
+  #           id
+  #           owner
+  #           timestamp
+  #           tx_id
+  #           type
+  #     }
+  findTransaction(filterOptions: {byLedgerToFrom: "hive:${username}"}) {
+    anchr_height
+    anchr_index
+    anchr_opidx
+    anchr_ts
+    data
+    first_seen
+    id
+    ledger {
+      amount
+      asset
+      from
+      memo
+      params
+      to
+      type
     }
-    findTransaction(filterOptions: {byAccount: "${username}"}) {
-      txs {
-        status
-        id
-        anchored_height
-        data {
-          action
-          contract_id
-          op
-          payload
-        }
-        required_auths{value}
-      }
+    nonce
+    rc_limit
+    required_auths
+    status
+    type
   }}
   `;
   return (await fetchQuery(query)).data;
@@ -95,20 +109,38 @@ const fetchHistory = async (username: string): Promise<VscHistoryResponse> => {
 
 const getOrganizedHistory = async (username: string) => {
   const history = await fetchHistory(username);
-  const organizedHistory = [
-    ...history.findLedgerTXs.txs.map((e) => {
-      e.type = VscHistoryType.TRANSFER;
-      e.timestamp = blockHeightToTimestamp(e.block_height);
-      return e;
-    }),
-    ...history.findTransaction.txs.map((e) => {
-      e.type = VscHistoryType.CONTRACT_CALL;
-      e.timestamp = blockHeightToTimestamp(e.anchored_height);
-
-      return e;
-    }),
+  const organizedHistory: VscHistoryItem[] = [
+    // ...(history.findLedgerTXs || [])
+    //   .map((e) => {
+    //     return {
+    //       from: e.from,
+    //       to: e.owner,
+    //       amount: e.amount,
+    //       timestamp: new Date(e.timestamp + 'Z'),
+    //       txId: e.id,
+    //       asset: e.asset,
+    //       status: VscStatus.CONFIRMED,
+    //       type: VscHistoryType.DEPOSIT,
+    //     };
+    //   })
+    //   .filter((e) => e.to === `hive:${username}`),
+    ...(history.findTransaction || [])
+      .map((e) => {
+        return {
+          from: e.data.from,
+          to: e.data.to,
+          amount: e.data.amount,
+          timestamp: e.first_seen,
+          txId: e.id,
+          memo: e.data.memo,
+          asset: e.data.asset,
+          status: e.status,
+          type: e.data.type,
+        };
+      })
+      .filter((e) => !(e.type === 'withdraw' && e.from !== `hive:${username}`)),
   ].sort((a, b) => {
-    return b.timestamp.getTime() - a.timestamp.getTime();
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   });
   return organizedHistory;
 };
@@ -122,9 +154,14 @@ const blockHeightToTimestamp = (height: number) => {
 };
 
 const getAddressFromDid = (did: string) => {
-  const regex = new RegExp(':([a-zA-Z0-9]*)$');
+  const regex = new RegExp(':([a-zA-Z0-9.-]*)$');
   const matches = did.match(regex);
   return matches?.[matches.length - 1];
+};
+
+const getFormattedAddress = (address: string) => {
+  if (address.startsWith('hive:')) return `@${getAddressFromDid(address)}`;
+  else return FormatUtils.shortenString(getAddressFromDid(address)!, 4);
 };
 
 const fetchQuery = (query: any) => {
@@ -139,9 +176,97 @@ const fetchQuery = (query: any) => {
   }).then((res) => res.json());
 };
 
+const getAccountBalance = async (username: string) => {
+  const query = `{
+    getAccountBalance(account: "hive:${username}") {
+    account
+    hbd
+    hive
+    hbd_savings
+    hbd_claim
+    hbd_modify
+    hbd_avg
+    block_height
+    hive_consensus
+  }
+  }`;
+  return (await fetchQuery(query)).data.getAccountBalance;
+};
+
+const getWithdrawJson = (
+  data: Omit<RequestVscWithdrawal, 'domain' | 'type'>,
+  netId?: string,
+) => {
+  const JSON_ID = 'vsc.withdraw';
+  const json = {
+    net_id: data.netId || netId,
+    from: data.username!.startsWith('hive:')
+      ? data.username
+      : `hive:${data.username}`,
+    to: data.to.startsWith('hive:') ? data.to : `hive:${data.to}`,
+    amount: data.amount,
+    asset: data.currency.toLowerCase(),
+    memo: data.memo,
+  };
+  return {
+    id: JSON_ID,
+    json,
+  };
+};
+
+const getTransferJson = (
+  data: Omit<RequestVscTransfer, 'domain' | 'type'>,
+  netId?: string,
+) => {
+  const JSON_ID = 'vsc.transfer';
+  const json = {
+    net_id: data.netId || netId,
+    from: data.username!.startsWith('hive:')
+      ? data.username
+      : `hive:${data.username}`,
+    to: data.to.startsWith('hive:') ? data.to : `hive:${data.to}`,
+    amount: data.amount,
+    asset: data.currency.toLowerCase(),
+    memo: data.memo,
+  };
+  return {
+    id: JSON_ID,
+    json,
+  };
+};
+
+const getStakingJson = (
+  data: Omit<RequestVscStaking, 'domain' | 'type'>,
+  netId?: string,
+) => {
+  const JSON_ID =
+    data.operation === VscStakingOperation.STAKING
+      ? 'vsc.stake_hbd'
+      : 'vsc.unstake_hbd';
+  const json = {
+    net_id: data.netId || netId,
+    from: data.username!.startsWith('hive:')
+      ? data.username
+      : `hive:${data.username}`,
+    to: data.to.startsWith('hive:') ? data.to : `hive:${data.to}`,
+    amount: data.amount,
+    asset: data.currency.toLowerCase(),
+  };
+  return {
+    id: JSON_ID,
+    json,
+  };
+};
+
 export const VscUtils = {
   checkStatus,
   waitForStatus,
   getOrganizedHistory,
   getAddressFromDid,
+  getAccountBalance,
+  blockHeightToTimestamp,
+  getFormattedAddress,
+  getWithdrawJson,
+  getTransferJson,
+  getStakingJson,
 };

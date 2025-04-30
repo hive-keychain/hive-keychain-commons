@@ -422,3 +422,9 @@ export type KeychainRequestWrapper = {
   request: KeychainRequest;
   request_id: number;
 };
+
+export enum LoadingState {
+  LOADING,
+  LOADED,
+  FAILED,
+}

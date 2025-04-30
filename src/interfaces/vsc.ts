@@ -7,16 +7,11 @@ export enum VscStatus {
 
 export enum VscHistoryType {
   CONTRACT_CALL = 'CONTRACT_CALL',
-  TRANSFER = 'TRANSFER',
-  DEPOSIT = 'DEPOSIT',
-  WITHDRAW = 'WITHDRAW',
-  STAKING = 'STAKING',
-  UNSTAKING = 'UNSTAKING',
-}
-
-export enum VscLedgerType {
-  WITHDRAW = 'withdraw',
+  TRANSFER = 'transfer',
   DEPOSIT = 'deposit',
+  WITHDRAW = 'withdraw',
+  STAKING = 'stake_hbd',
+  UNSTAKING = 'unstake_hbd',
 }
 
 export enum VscToken {
@@ -33,39 +28,66 @@ export type VscRequestParams = {
   netId?: string;
 };
 export type VscHistoryResponse = {
-  findLedgerTXs: {
-    txs: VscTransfer[];
-  };
-  findTransaction: {
-    txs: VscCall[];
-  };
+  findLedgerTXs: VscLedgerTxResponse[];
+  findTransaction: VscTxResponse[];
 };
 
-export type VscTransfer = {
-  type?: VscHistoryType.TRANSFER;
+enum VscAsset {
+  HIVE = 'hive',
+  HBD = 'hbd',
+}
+export type VscLedgerTxResponse = {
   amount: number;
   block_height: number;
   from: string;
   id: string;
-  memo: string | null;
   owner: string;
-  t: VscLedgerType;
-  tk: VscToken;
   timestamp: Date;
-  status: VscStatus;
+  asset: VscAsset;
+  tx_id: string;
+  type: string;
 };
 
-export type VscCall = {
-  type?: VscHistoryType.CONTRACT_CALL;
+export type VscTxResponse = {
   status: VscStatus;
   id: string;
-  anchored_height: number;
+  anchr_height: number;
   timestamp: Date;
-  data: {
-    action: string;
-    contract_id: string;
-    op: string;
-    payload: object;
-  };
+  data: VscTxData;
   required_auths: { value: string }[];
+  anchr_index: number;
+  anchr_opidx: number;
+  anchr_ts: Date;
+  first_seen: Date;
+  ledger: any[];
+  nonce: number;
+  rc_limit: number;
+  type: string;
+};
+
+export type VscTxData = {
+  amount: number;
+  asset: VscAsset;
+  from: string;
+  memo?: string;
+  to: string;
+  type: VscHistoryType;
+};
+
+export type VscHistoryItem = VscTxData & {
+  timestamp: Date;
+  status: VscStatus;
+  txId: string;
+};
+
+export type VscAccountBalance = {
+  account: String;
+  block_height: number;
+  hbd: number;
+  hbd_avg: number;
+  hbd_claim: number;
+  hbd_modify: number;
+  hbd_savings: number;
+  hive: number;
+  hive_consensus: number;
 };
