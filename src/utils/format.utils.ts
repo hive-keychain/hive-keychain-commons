@@ -8,7 +8,7 @@ const withCommas = (nb: string, decimals = 3, removeTrailingZeros = false) => {
   const currency = nb.split(' ')[1];
 
   const value = parseFloat(nb).toFixed(decimals);
-  var parts = value.split('.');
+  const parts = value.split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   let finalNumber = parts.join('.');
 
@@ -56,7 +56,7 @@ const formatCurrencyValue = (
 };
 
 const nFormatter = (num: number, digits: number) => {
-  var si = [
+  const si = [
     {
       value: 1,
       symbol: '',
@@ -86,8 +86,8 @@ const nFormatter = (num: number, digits: number) => {
       symbol: 'E',
     },
   ];
-  var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  var i;
+  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  let i;
   for (i = si.length - 1; i > 0; i--) {
     if (num >= si[i].value) {
       break;
@@ -96,8 +96,8 @@ const nFormatter = (num: number, digits: number) => {
   return (num / si[i].value).toFixed(digits).replace(rx, '$1') + si[i].symbol;
 };
 
-const hasMoreThanXDecimal = (number: number, decimal: number) => {
-  const splitedNumber = number.toString().split('.');
+const hasMoreThanXDecimal = (nb: number, decimal: number) => {
+  const splitedNumber = nb.toString().split('.');
   return splitedNumber.length > 1 ? splitedNumber[1].length > decimal : false;
 };
 
@@ -126,12 +126,12 @@ const removeHtmlTags = (str: string) => {
   return str.replace(/<(?:.|\n)*?>/gm, '');
 };
 
-const getValFromString = (string: string): number => {
-  return parseFloat(string.split(' ')[0]);
+const getValFromString = (str: string): number => {
+  return parseFloat(str.split(' ')[0]);
 };
 
-const trimUselessZero = (number: number, precision: number) => {
-  const numberWithPrecision = number.toFixed(precision);
+const trimUselessZero = (nb: number, precision: number) => {
+  const numberWithPrecision = nb.toFixed(precision);
   const n = parseFloat(numberWithPrecision).toString();
   if (n.split('.').length > 0 && n.split('.')[1]?.length > 3)
     return FormatUtils.withCommas(n);
@@ -139,7 +139,7 @@ const trimUselessZero = (number: number, precision: number) => {
 };
 
 const getUSDFromVests = (
-  vestAmount: Number,
+  vestAmount: number,
   globalProperties: GlobalProperties,
   currencyPrices: CurrencyPrices,
 ) => {
@@ -149,8 +149,8 @@ const getUSDFromVests = (
   ).toFixed(2);
 };
 
-const getOrdinalLabelTranslation = (active_rank: string) => {
-  const result = parseFloat(active_rank) % 10;
+const getOrdinalLabelTranslation = (activeRank: string) => {
+  const result = parseFloat(activeRank) % 10;
   switch (result) {
     case 1:
       return 'html_popup_witness_ranking_ordinal_st_label';
@@ -167,11 +167,11 @@ const dateToFormattedString = (date: Date) => {
   return moment(date).format('MM/DD/YY');
 };
 
-const shortenString = (string: string, length: number = 3) => {
-  //TODO : remove during merge EVM (duplicate)
-  return string?.length > length * 2
-    ? `${string.substring(length, 0)}...${string?.toString().slice(-length)}`
-    : string;
+const shortenString = (str: string, length: number = 3) => {
+  // TODO : remove during merge EVM (duplicate)
+  return str?.length > length * 2
+    ? `${str.substring(length, 0)}...${str?.toString().slice(-length)}`
+    : str;
 };
 
 export const FormatUtils = {

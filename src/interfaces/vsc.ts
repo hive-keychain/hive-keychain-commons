@@ -81,7 +81,7 @@ export type VscHistoryItem = VscTxData & {
 };
 
 export type VscAccountBalance = {
-  account: String;
+  account: string;
   block_height: number;
   hbd: number;
   hbd_avg: number;
