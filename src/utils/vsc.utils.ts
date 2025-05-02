@@ -17,16 +17,16 @@ import { FormatUtils } from './format.utils';
 const waitForStatus = async (
   id: string,
   type: VscHistoryType,
-  maxIterations: number = 20,
-  wait: number = 500,
+  timeoutSeconds: number = 10,
+  endAtStatus = VscStatus.CONFIRMED,
 ): Promise<VscStatus> => {
   let iterations = 0;
   let status: VscStatus = VscStatus.UNCONFIRMED;
-
+  const wait = 500;
+  const maxIterations = (timeoutSeconds / wait) * 1000;
   while (iterations < maxIterations) {
     status = await checkStatus(id, type);
-    if (status === VscStatus.CONFIRMED || status === VscStatus.FAILED)
-      return status;
+    if (status === endAtStatus || status === VscStatus.FAILED) return status;
     iterations++;
     await new Promise((resolve) => setTimeout(resolve, wait));
   }
@@ -34,30 +34,14 @@ const waitForStatus = async (
 };
 
 const checkStatus = (id: string, type: VscHistoryType): Promise<VscStatus> => {
-  let query;
-  if (
-    type === VscHistoryType.CONTRACT_CALL ||
-    type === VscHistoryType.WITHDRAW ||
-    type === VscHistoryType.STAKING ||
-    type === VscHistoryType.UNSTAKING ||
-    type === VscHistoryType.TRANSFER
-  ) {
-    query = `{
+  const query = `{
       findTransaction(
         filterOptions: {byId:"${id}"}
       ) {
           status
       }
     }`;
-  } else if (type === VscHistoryType.DEPOSIT) {
-    query = `{
-      findLedgerTXs(filterOptions: {byTxId: "${id}"}) {
-      
-        id
-      
-    }
-    }`;
-  }
+
   return fetchQuery(query).then((res) => {
     if (res?.data?.findTransaction?.[0])
       return res.data.findTransaction?.[0].status;
