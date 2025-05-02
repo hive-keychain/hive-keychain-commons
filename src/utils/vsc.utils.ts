@@ -8,7 +8,6 @@ import {
 import {
   VscHistoryItem,
   VscHistoryResponse,
-  VscHistoryType,
   VscStakingOperation,
   VscStatus,
 } from '../interfaces/vsc';
@@ -16,7 +15,6 @@ import { FormatUtils } from './format.utils';
 
 const waitForStatus = async (
   id: string,
-  type: VscHistoryType,
   timeoutSeconds: number = 10,
   endAtStatus = VscStatus.CONFIRMED,
 ): Promise<VscStatus> => {
@@ -25,7 +23,7 @@ const waitForStatus = async (
   const wait = 500;
   const maxIterations = (timeoutSeconds / wait) * 1000;
   while (iterations < maxIterations) {
-    status = await checkStatus(id, type);
+    status = await checkStatus(id);
     if (status === endAtStatus || status === VscStatus.FAILED) return status;
     iterations++;
     await new Promise((resolve) => setTimeout(resolve, wait));
@@ -33,7 +31,7 @@ const waitForStatus = async (
   return status;
 };
 
-const checkStatus = (id: string, type: VscHistoryType): Promise<VscStatus> => {
+const checkStatus = (id: string): Promise<VscStatus> => {
   const query = `{
       findTransaction(
         filterOptions: {byId:"${id}"}
