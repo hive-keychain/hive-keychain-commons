@@ -1,3 +1,4 @@
+export * from './interfaces/exchange';
 export * from './interfaces/global-properties';
 export * from './interfaces/keychain';
 export * from './interfaces/price';
