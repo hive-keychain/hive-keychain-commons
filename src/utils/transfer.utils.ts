@@ -63,7 +63,7 @@ const getExchangeValidationWarning = (
   hasMemo: boolean,
   isRecurrent?: boolean,
 ) => {
-  const exchange = exchanges.find((exchange) => exchange.username === account);
+  const exchange = exchanges.find((exch) => exch.username === account);
   if (!exchange) return;
   if (!exchange.acceptedCoins.includes(currency)) {
     // return chrome.i18n.getMessage('popup_warning_exchange_deposit', [currency]);
