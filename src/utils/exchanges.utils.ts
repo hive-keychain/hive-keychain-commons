@@ -40,6 +40,12 @@ const getExchanges = (): Exchange[] => {
   ];
 };
 
+const isExchange = (username: string) => {
+  const exchanges = getExchanges();
+  return !!exchanges.find((e) => e.username === username);
+};
+
 export const ExchangesUtils = {
   getExchanges,
+  isExchange,
 };
