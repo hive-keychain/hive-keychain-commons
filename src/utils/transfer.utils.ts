@@ -1,5 +1,5 @@
-import { Exchange } from '../interfaces/exchange';
 import { isWif } from './crypto.utils';
+import { ExchangesUtils } from './exchanges.utils';
 import { getPublicKeyFromPrivateKeyString } from './keys.utils';
 
 export enum TransferWarning {
@@ -30,7 +30,6 @@ const getPrivateKeysMemoValidationWarning = (memo: string): boolean => {
 
 const getTransferWarning = (
   account: string,
-  exchanges: Exchange[],
   currency: string,
   memo: any,
   phisingAccounts: any,
@@ -39,7 +38,6 @@ const getTransferWarning = (
 ) => {
   const exchangeWarning = getExchangeValidationWarning(
     account,
-    exchanges,
     currency,
     memo.length > 0,
     isRecurrent,
@@ -61,13 +59,14 @@ const getTransferWarning = (
 
 const getExchangeValidationWarning = (
   account: string,
-  exchanges: Exchange[],
   currency: string,
   hasMemo: boolean,
   isRecurrent?: boolean,
   isOnVsc?: boolean,
 ) => {
-  const exchange = exchanges.find((exch) => exch.username === account);
+  const exchange = ExchangesUtils.getExchanges().find(
+    (exch) => exch.username === account,
+  );
   if (!exchange) return;
   if (exchange && isOnVsc) return TransferWarning.EXCHANGE_VSC;
   if (!exchange.acceptedCoins.includes(currency)) {

@@ -19,6 +19,7 @@ export * from './swaps/swap-api.interface';
 export * from './swaps/swap.interface';
 export * from './utils/assets.utils';
 export * from './utils/crypto.utils';
+export * from './utils/exchanges.utils';
 export * from './utils/export-transactions.utils';
 export * from './utils/format.utils';
 export * from './utils/history-filters.utils';
