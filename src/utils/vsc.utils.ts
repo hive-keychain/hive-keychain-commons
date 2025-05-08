@@ -6,6 +6,7 @@ import {
   RequestVscWithdrawal,
 } from '../interfaces/keychain';
 import {
+  VscAccountBalance,
   VscHistoryItem,
   VscHistoryResponse,
   VscStakingOperation,
@@ -158,7 +159,9 @@ const fetchQuery = (query: any) => {
   }).then((res) => res.json());
 };
 
-const getAccountBalance = async (username: string) => {
+const getAccountBalance = async (
+  username: string,
+): Promise<VscAccountBalance> => {
   const query = `{
     getAccountBalance(account: "hive:${username}") {
     account
