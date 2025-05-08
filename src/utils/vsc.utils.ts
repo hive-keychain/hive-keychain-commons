@@ -175,7 +175,17 @@ const getAccountBalance = async (
     hive_consensus
   }
   }`;
-  return (await fetchQuery(query)).data.getAccountBalance;
+  return (
+    (await fetchQuery(query)).data.getAccountBalance || {
+      hive: 0,
+      hbd: 0,
+      hive_consensus: 0,
+      hbd_avg: 0,
+      hbd_claim: 0,
+      hbd_modify: 0,
+      hbd_savings: 0,
+    }
+  );
 };
 
 const getWithdrawJson = (
