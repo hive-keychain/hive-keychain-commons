@@ -4,7 +4,7 @@ import moment = require('moment');
 import * as winston from 'winston';
 
 const logFormat = winston.format.printf((info) => {
-  const timestamp = moment(info.timestamp);
+  const timestamp = moment();
   return `[${timestamp.format('L') + ' ' + timestamp.format('HH:mm:ss')}][${
     info.level
   }] ${info.message}`;
