@@ -91,3 +91,11 @@ export type VscAccountBalance = {
   hive: number;
   hive_consensus: number;
 };
+
+export enum VscOperation {
+  TRANSFER = 'vsc_transfer',
+  DEPOSIT = 'vsc_deposit',
+  WITHDRAW = 'vsc_withdraw',
+  STAKING = 'vsc_staking',
+  UNSTAKING = 'vsc_unstaking',
+}
