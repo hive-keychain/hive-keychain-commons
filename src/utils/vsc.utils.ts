@@ -9,6 +9,7 @@ import {
   VscAccountBalance,
   VscHistoryItem,
   VscHistoryResponse,
+  VscHistoryType,
   VscStakingOperation,
   VscStatus,
 } from '../interfaces/vsc';
@@ -52,75 +53,51 @@ const checkStatus = (id: string): Promise<VscStatus> => {
 
 const fetchHistory = async (username: string): Promise<VscHistoryResponse> => {
   const query = `{
-  #  findLedgerTXs(filterOptions: {byToFrom: "hive:${username}",byTypes: "deposit"}) {
-  #           amount
-  #           asset
-  #           block_height
-  #           from
-  #           id
-  #           owner
-  #           timestamp
-  #           tx_id
-  #           type
-  #     }
-  findTransaction(filterOptions: {byLedgerToFrom: "hive:${username}"}) {
-    anchr_height
-    anchr_index
-    anchr_opidx
-    anchr_ts
-    data
-    first_seen
-    id
-    ledger {
-      amount
-      asset
-      from
-      memo
-      params
-      to
+    findTransaction(filterOptions: {byLedgerToFrom: "hive:${username}"}) {
+      id
+      anchr_height
+      anchr_index
+      anchr_ts
       type
+      op_types
+      first_seen
+      nonce
+      rc_limit
+      required_auths
+      status
+      ops {
+        required_auths
+        type
+        index
+        data
+      }
     }
-    nonce
-    rc_limit
-    required_auths
-    status
-    type
-  }}
-  `;
-  return (await fetchQuery(query)).data;
+  }`;
+  const response = await fetchQuery(query);
+  if (!response?.data) {
+    console.error('Invalid response from VSC API:', response);
+    return { findTransaction: [], findLedgerTXs: [] };
+  }
+  return response.data;
 };
 
 const getOrganizedHistory = async (username: string) => {
   const history = await fetchHistory(username);
   const organizedHistory: VscHistoryItem[] = [
-    // ...(history.findLedgerTXs || [])
-    //   .map((e) => {
-    //     return {
-    //       from: e.from,
-    //       to: e.owner,
-    //       amount: e.amount,
-    //       timestamp: new Date(e.timestamp + 'Z'),
-    //       txId: e.id,
-    //       asset: e.asset,
-    //       status: VscStatus.CONFIRMED,
-    //       type: VscHistoryType.DEPOSIT,
-    //     };
-    //   })
-    //   .filter((e) => e.to === `hive:${username}`),
     ...(history.findTransaction || [])
-      .map((e) => {
-        return {
-          from: e.data.from,
-          to: e.data.to,
-          amount: e.data.amount,
-          timestamp: e.first_seen,
+      .flatMap((e) =>
+        e.ops.map((op) => ({
+          from: op.data.from,
+          to: op.data.to,
+          amount: parseFloat(op.data.amount),
+          timestamp: new Date(e.first_seen),
           txId: e.id,
-          memo: e.data.memo,
-          asset: e.data.asset,
+          memo: op.data.memo,
+          asset: op.data.asset,
           status: e.status,
-          type: e.data.type,
-        };
-      })
+          type: op.type as VscHistoryType,
+        })),
+      )
       .filter((e) => !(e.type === 'withdraw' && e.from !== `hive:${username}`)),
   ].sort((a, b) => {
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();

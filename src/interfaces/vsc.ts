@@ -28,8 +28,8 @@ export type VscRequestParams = {
   netId?: string;
 };
 export type VscHistoryResponse = {
-  findLedgerTXs: VscLedgerTxResponse[];
   findTransaction: VscTxResponse[];
+  findLedgerTXs: VscLedgerTxResponse[];
 };
 
 enum VscAsset {
@@ -52,17 +52,26 @@ export type VscTxResponse = {
   status: VscStatus;
   id: string;
   anchr_height: number;
-  timestamp: Date;
-  data: VscTxData;
-  required_auths: { value: string }[];
   anchr_index: number;
-  anchr_opidx: number;
-  anchr_ts: Date;
-  first_seen: Date;
-  ledger: any[];
+  anchr_ts: string;
+  type: string;
+  op_types: string[];
+  first_seen: string;
   nonce: number;
   rc_limit: number;
-  type: string;
+  required_auths: string[];
+  ops: {
+    required_auths: string[];
+    type: string;
+    index: number;
+    data: {
+      amount: string;
+      asset: VscAsset;
+      from: string;
+      memo: string;
+      to: string;
+    };
+  }[];
 };
 
 export type VscTxData = {
