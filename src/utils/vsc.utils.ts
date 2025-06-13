@@ -142,15 +142,14 @@ const getAccountBalance = async (
   const query = `{
     getAccountBalance(account: "hive:${username}") {
     account
-    block_height
     hbd
-    hbd_avg
-    hbd_modify
-    hbd_claim
-    hbd_savings
     hive
+    hbd_savings
+    hbd_claim
+    hbd_modify
+    hbd_avg
+    block_height
     hive_consensus
-    consensus_unstaking
     pending_hbd_unstaking
   }
   }`;
