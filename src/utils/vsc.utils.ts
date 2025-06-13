@@ -142,14 +142,16 @@ const getAccountBalance = async (
   const query = `{
     getAccountBalance(account: "hive:${username}") {
     account
-    hbd
-    hive
-    hbd_savings
-    hbd_claim
-    hbd_modify
-    hbd_avg
     block_height
+    hbd
+    hbd_avg
+    hbd_modify
+    hbd_claim
+    hbd_savings
+    hive
     hive_consensus
+    consensus_unstaking
+    pending_hbd_unstaking
   }
   }`;
   return (
@@ -161,6 +163,7 @@ const getAccountBalance = async (
       hbd_claim: 0,
       hbd_modify: 0,
       hbd_savings: 0,
+      pending_hbd_unstaking: 0,
     }
   );
 };
