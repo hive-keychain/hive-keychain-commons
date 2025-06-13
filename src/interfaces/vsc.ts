@@ -90,4 +90,5 @@ export type VscAccountBalance = {
   hbd_savings: number;
   hive: number;
   hive_consensus: number;
+  pending_hbd_unstaking: number;
 };
