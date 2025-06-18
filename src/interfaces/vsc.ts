@@ -10,8 +10,8 @@ export enum VscHistoryType {
   TRANSFER = 'transfer',
   DEPOSIT = 'deposit',
   WITHDRAW = 'withdraw',
-  STAKING = 'stake_hbd',
-  UNSTAKING = 'unstake_hbd',
+  STAKING = 'stake',
+  UNSTAKING = 'unstake',
 }
 
 export enum VscToken {
