@@ -57,9 +57,11 @@ const fetchHistory = async (
   offset?: number,
 ): Promise<VscHistoryResponse> => {
   const query = `{
-    findTransaction(filterOptions: {byAccount: "hive:${username}", limit: ${
+    findTransaction(
+      filterOptions: { byAccount: "hive:${username}", limit: ${
     limit || null
-  }, offset: ${offset || null}}) {
+  }, offset: ${offset || null} }
+    ) {
       id
       status
       type
@@ -84,11 +86,28 @@ const fetchHistory = async (
         type
       }
     }
+    findLedgerActions(
+      filterOptions: { byAccount: "hive:${username}", limit: ${
+    limit || null
+  }, offset: ${offset || null} }
+    ) {
+      id
+      status
+      amount
+      asset
+      to
+      memo
+      action_id
+      type
+      params
+      block_height
+      timestamp
+    }
   }`;
   const response = await fetchQuery(query);
   if (!response?.data) {
     console.error('Invalid response from VSC API:', response);
-    return { findTransaction: [], findLedgerTXs: [] };
+    return { findTransaction: [], findLedgerActions: [] };
   }
   return response.data;
 };
@@ -111,6 +130,17 @@ const getOrganizedHistory = async (username: string) => {
         })),
       )
       .filter((e) => !(e.type === 'withdraw' && e.from !== `hive:${username}`)),
+    ...(history.findLedgerActions || []).map((e) => ({
+      from: e.to,
+      to: e.to,
+      amount: e.amount,
+      timestamp: new Date(e.timestamp),
+      txId: e.id,
+      memo: e.memo,
+      asset: e.asset,
+      status: e.status,
+      type: e.type as VscHistoryType,
+    })),
   ].sort((a, b) => {
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   });

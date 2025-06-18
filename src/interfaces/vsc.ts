@@ -29,24 +29,13 @@ export type VscRequestParams = {
 };
 export type VscHistoryResponse = {
   findTransaction: VscTxResponse[];
-  findLedgerTXs: VscLedgerTxResponse[];
+  findLedgerActions: VscLedgerActionResponse[];
 };
 
 enum VscAsset {
   HIVE = 'hive',
   HBD = 'hbd',
 }
-export type VscLedgerTxResponse = {
-  amount: number;
-  block_height: number;
-  from: string;
-  id: string;
-  owner: string;
-  timestamp: Date;
-  asset: VscAsset;
-  tx_id: string;
-  type: string;
-};
 
 export type VscLedgerItem = {
   amount: number;
@@ -55,6 +44,20 @@ export type VscLedgerItem = {
   memo: string;
   to: string;
   type: string;
+};
+
+export type VscLedgerActionResponse = {
+  id: string;
+  status: VscStatus;
+  amount: number;
+  asset: VscAsset;
+  to: string;
+  memo: string;
+  action_id: string;
+  type: string;
+  params: any;
+  block_height: number;
+  timestamp: string;
 };
 
 export type VscOpsData = {
