@@ -48,30 +48,40 @@ export type VscLedgerTxResponse = {
   type: string;
 };
 
-export type VscTxResponse = {
-  status: VscStatus;
-  id: string;
-  anchr_height: number;
-  anchr_index: number;
-  anchr_ts: string;
+export type VscLedgerItem = {
+  amount: number;
+  asset: VscAsset;
+  from: string;
+  memo: string;
+  to: string;
   type: string;
-  op_types: string[];
+};
+
+export type VscOpsData = {
+  amount: string;
+  asset: VscAsset;
+  from: string;
+  memo: string;
+  to: string;
+};
+
+export type VscTxResponse = {
+  id: string;
+  status: VscStatus;
+  type: string;
   first_seen: string;
   nonce: number;
-  rc_limit: number;
+  anchr_index: number;
+  anchr_height: number;
+  anchr_ts: string;
   required_auths: string[];
+  op_types: string[];
   ops: {
-    required_auths: string[];
-    type: string;
+    data: VscOpsData;
     index: number;
-    data: {
-      amount: string;
-      asset: VscAsset;
-      from: string;
-      memo: string;
-      to: string;
-    };
+    type: string;
   }[];
+  ledger: VscLedgerItem[];
 };
 
 export type VscTxData = {

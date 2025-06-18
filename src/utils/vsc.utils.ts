@@ -51,25 +51,37 @@ const checkStatus = (id: string): Promise<VscStatus> => {
   });
 };
 
-const fetchHistory = async (username: string): Promise<VscHistoryResponse> => {
+const fetchHistory = async (
+  username: string,
+  limit?: number,
+  offset?: number,
+): Promise<VscHistoryResponse> => {
   const query = `{
-    findTransaction(filterOptions: {byLedgerToFrom: "hive:${username}"}) {
+    findTransaction(filterOptions: {byAccount: "hive:${username}", limit: ${
+    limit || null
+  }, offset: ${offset || null}}) {
       id
-      anchr_height
-      anchr_index
-      anchr_ts
-      type
-      op_types
-      first_seen
-      nonce
-      rc_limit
-      required_auths
       status
+      type
+      first_seen
+      nonce  
+      anchr_index
+      anchr_height
+      anchr_ts
+      required_auths
+      op_types
       ops {
-        required_auths
-        type
-        index
         data
+        index
+        type
+      }
+      ledger {
+        amount
+        asset
+        from
+        memo
+        to
+        type
       }
     }
   }`;
