@@ -53,7 +53,7 @@ const checkStatus = (id: string): Promise<VscStatus> => {
 
 const fetchHistory = async (username: string): Promise<VscHistoryResponse> => {
   const query = `{
-    findTransaction(filterOptions: {byLedgerToFrom: "hive:${username}"}) {
+    findTransaction(filterOptions: {byAccount: "hive:${username}"}) {
       id
       anchr_height
       anchr_index
