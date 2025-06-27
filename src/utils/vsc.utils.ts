@@ -53,8 +53,8 @@ const checkStatus = (id: string): Promise<VscStatus> => {
 
 const fetchHistory = async (
   username: string,
-  limit?: number,
-  offset?: number,
+  limit: number | null = null,
+  offset: number | null = null,
 ): Promise<VscHistoryResponse> => {
   const query = `{
     findTransaction(filterOptions: {byAccount: "hive:${username}",limit:${limit},offset:${offset}}) {
