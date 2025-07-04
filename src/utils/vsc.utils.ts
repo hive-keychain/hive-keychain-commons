@@ -112,8 +112,12 @@ const fetchHistory = async (
   return response.data;
 };
 
-const getOrganizedHistory = async (username: string) => {
-  const history = await fetchHistory(username);
+const getOrganizedHistory = async (
+  username: string,
+  limit?: number,
+  offset?: number,
+) => {
+  const history = await fetchHistory(username, limit, offset);
   const organizedHistory: VscHistoryItem[] = [
     ...(history.findTransaction || [])
       .flatMap((e) =>
