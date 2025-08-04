@@ -30,13 +30,13 @@ const getExchanges = (): Exchange[] => {
       username: 'huobi-pro',
       acceptedCoins: ['HIVE'],
     },
-    {
-      name: 'Mexc',
-      image: 'mexc',
-      link: 'https://www.mexc.com/exchange/HIVE_USDT',
-      username: 'mxchive',
-      acceptedCoins: ['HIVE'],
-    },
+    // {
+    //   name: 'Mexc',
+    //   image: 'mexc',
+    //   link: 'https://www.mexc.com/exchange/HIVE_USDT',
+    //   username: 'mxchive',
+    //   acceptedCoins: ['HIVE'],
+    // },
   ];
 };
 
