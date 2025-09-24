@@ -23,6 +23,7 @@ export * from './utils/exchanges.utils';
 export * from './utils/export-transactions.utils';
 export * from './utils/format.utils';
 export * from './utils/history-filters.utils';
+export * from './utils/images.utils';
 export * from './utils/keys.utils';
 export * from './utils/transaction.utils';
 export * from './utils/transfer.utils';
