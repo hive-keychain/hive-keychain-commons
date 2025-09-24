@@ -1,7 +1,11 @@
 const getImmutableImage = (url: string) => {
-  return !url?.endsWith('.svg') ? `https://images.hive.blog/640x0/${url}` : url;
+  return !(
+    url?.endsWith('.svg') || url?.startsWith('https://images.hive.blog/')
+  )
+    ? `https://images.hive.blog/0x0/${url}`
+    : url;
 };
 
-const ImageUtils = {getImmutableImage};
+const ImageUtils = { getImmutableImage };
 
 export default ImageUtils;
