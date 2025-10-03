@@ -83,6 +83,7 @@ export interface ExchangeableToken {
   icon: string;
   legacySymbol?: string;
   precision: number;
+  displayedNetwork: string;
   exchanges: SwapCryptos[];
 }
 
