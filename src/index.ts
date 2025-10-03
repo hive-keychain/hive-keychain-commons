@@ -2,6 +2,7 @@ export * from './interfaces/exchange';
 export * from './interfaces/global-properties';
 export * from './interfaces/keychain';
 export * from './interfaces/price';
+export * from './interfaces/swap-cryptos.interface';
 export * from './interfaces/tokens';
 export * from './interfaces/vsc';
 export { LeaseKeys } from './lease-market/lease-keys';
