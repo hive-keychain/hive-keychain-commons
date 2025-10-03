@@ -157,3 +157,14 @@ export interface ExchangeOperationForm {
   currencyTo: string;
   partnerFee: number;
 }
+
+export type ExchangeEstimation = {
+  provider: SwapCryptos;
+  estimation: SwapCryptosEstimationDisplay;
+};
+
+export type ExchangeMinMaxAmount = {
+  provider: SwapCryptos;
+  min: number | null;
+  max: number | null;
+};
