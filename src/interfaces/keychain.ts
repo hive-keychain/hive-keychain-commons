@@ -289,6 +289,7 @@ export type RequestRecurrentTransfer = CommonRequestParams & {
   memo: string;
   recurrence: number;
   executions: number;
+  pair_id?: number;
 };
 
 export type RequestSwap = CommonRequestParams & {
