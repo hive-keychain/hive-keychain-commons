@@ -18,6 +18,7 @@ export enum KeychainRequestTypes {
   custom = 'custom',
   signedCall = 'signedCall',
   transfer = 'transfer',
+  savings = 'savings',
   sendToken = 'sendToken',
   delegation = 'delegation',
   witnessVote = 'witnessVote',
@@ -179,6 +180,15 @@ export type RequestTransfer = CommonRequestParams & {
   memo: string;
   enforce: boolean;
   currency: string;
+};
+
+export type RequestSavings = CommonRequestParams & {
+  type: KeychainRequestTypes.savings;
+  username?: string;
+  to: string;
+  amount: string;
+  currency: string;
+  operation: 'deposit' | 'withdraw';
 };
 
 export type RequestSendToken = CommonRequestParams & {
@@ -367,6 +377,7 @@ export type KeychainRequestData = (
   | RequestCustomJSON
   | RequestSignedCall
   | RequestTransfer
+  | RequestSavings
   | RequestSendToken
   | RequestDelegation
   | RequestWitnessVote
