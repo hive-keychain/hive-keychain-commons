@@ -187,6 +187,7 @@ export type RequestSavings = CommonRequestParams & {
   username?: string;
   to: string;
   amount: string;
+  memo?: string;
   currency: string;
   operation: 'deposit' | 'withdraw';
 };
