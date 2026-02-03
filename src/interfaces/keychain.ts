@@ -149,7 +149,7 @@ export type RequestPost = CommonRequestParams & {
 
 export type RequestVote = CommonRequestParams & {
   type: KeychainRequestTypes.vote;
-  username: string;
+  username?: string;
   permlink: string;
   author: string;
   weight: string | number;
@@ -194,7 +194,7 @@ export type RequestSavings = CommonRequestParams & {
 
 export type RequestSendToken = CommonRequestParams & {
   type: KeychainRequestTypes.sendToken;
-  username: string;
+  username?: string;
   to: string;
   amount: string;
   memo: string;
@@ -224,7 +224,7 @@ export type RequestProxy = CommonRequestParams & {
 
 export type RequestPowerUp = CommonRequestParams & {
   type: KeychainRequestTypes.powerUp;
-  username: string;
+  username?: string;
   recipient: string;
   hive: string;
 };
@@ -286,7 +286,7 @@ export type RequestAddAccount = CommonRequestParams & {
 
 export type RequestConvert = CommonRequestParams & {
   type: KeychainRequestTypes.convert;
-  username: string;
+  username?: string;
   amount: string;
   collaterized: boolean;
 };
