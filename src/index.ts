@@ -21,6 +21,7 @@ export * from './swaps/swap.interface';
 export * from './utils/accounts.utils';
 export * from './utils/assets.utils';
 export * from './utils/crypto.utils';
+export * from './utils/escrow-history.utils';
 export * from './utils/exchanges.utils';
 export * from './utils/export-transactions.utils';
 export * from './utils/format.utils';

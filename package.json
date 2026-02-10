@@ -1,6 +1,6 @@
 {
   "name": "hive-keychain-commons",
-  "version": "1.13.2",
+  "version": "1.13.3",
   "description": "Platform-agnostic functions used in Hive Keychain mobile and extensions",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
