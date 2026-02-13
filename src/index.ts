@@ -1,6 +1,7 @@
 export * from './interfaces/exchange';
 export * from './interfaces/global-properties';
 export * from './interfaces/keychain';
+export * from './interfaces/lifi-history';
 export * from './interfaces/price';
 export * from './interfaces/swap-cryptos.interface';
 export * from './interfaces/tokens';
